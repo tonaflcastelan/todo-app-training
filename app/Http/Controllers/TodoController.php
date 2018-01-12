@@ -42,12 +42,10 @@ class TodoController extends Controller
     {
         $rules = [
             'text' => 'required',
-            'done' => 'required|boolean'
         ];
 
         $messages = [
             'required'  => 'El campo :attribute es requerido',
-            'boolean'   => 'El campo :attribute debe ser boolenao',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -78,12 +76,10 @@ class TodoController extends Controller
     public function update($id, Request $request)
     {
         $rules = [
-            'text' => 'required',
             'done' => 'required|boolean'
         ];
 
         $messages = [
-            'required'  => 'El campo :attribute es requerido',
             'boolean'   => 'El campo :attribute debe ser boolenao',
         ];
 

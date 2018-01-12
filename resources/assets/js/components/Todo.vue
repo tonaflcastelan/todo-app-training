@@ -3,7 +3,7 @@
         <div class="box">
             <div class="field is-grouped">
                 <p class="control is-expanded">
-                    <input class="input" type="text" placeholder="Nuevo recordatorio" v-model="todoItemText">
+                    <input class="input" type="text" placeholder="Nuevo recordatorio" v-model="todoItemText" name="text">
                 </p>
                 <p class="control">
                     <a class="button is-info" @click="addTodo">
@@ -38,30 +38,43 @@
             return {
                 todoItemText: '',
                 items: [],
+                errors: '',
             }
         },
         mounted () {
-            this.items = [
-                { text: 'Primer recordatorio', done: true },
-                { text: 'Segundo recordatorio', done: false },
-                { text: 'Tercero recordatorio', done: false },
-                { text: 'Cuarto recordatorio', done: true },
-                { text: 'Quinto recordatorio', done: false },
-            ]
+            this.getTodo();
         },
         methods: {
+            getTodo: function() {
+                axios.get('api/todos').then(response => {
+                    this.items = response.data
+                });
+            },
             addTodo () {
-                let text = this.todoItemText.trim()
-                if (text !== '') {
-                    this.items.push({ text: text, done: false })
-                    this.todoItemText = ''
-                }
+                axios.post('api/todos', {
+                    text: this.todoItemText,
+                    done: false
+                }).then((res) => {
+                    this.todoItemText = '',
+                    this.errors = [];
+                    this.getTodo();
+                }).catch(error => {
+                    this.errors = 'Ocurrió un error al guardar'
+                });
             },
             removeTodo (todo) {
-                this.items = this.items.filter(item => item !== todo)
+                axios.delete('api/todos/' + todo.id).then(response => {
+                    this.getTodo();
+                });
             },
             toggleDone (todo) {
                 todo.done = !todo.done
+                axios.put('api/todos/' + todo.id, {done: todo.done}).then(response => {
+                    this.errors   = [];
+                    this.getTodo();
+                }).catch(error => {
+                    this.errors = 'Corrija para poder editar con éxito'
+                });
             }
         }
     }
