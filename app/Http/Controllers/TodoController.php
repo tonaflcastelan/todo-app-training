@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Response;
 use App\Todo;
 
 /**
@@ -37,8 +39,33 @@ class TodoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
-    {
-        // TODO
+    {   
+
+        $rules = [
+            'text' => 'required',
+            'done' => 'required|boolean'
+        ];
+
+        $messages = [
+            'required'  => 'El campo :attribute es requerido',
+            'boolean'   => 'El campo :attribute debe ser boolenao',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ), 400);
+        }
+
+        $data = Todo::create($request->all());
+
+        return Response::json([
+                'success' => true,
+                'message' => "Data inserted {$data->text}"
+            ]);
     }
 
     /**
