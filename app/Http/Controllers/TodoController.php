@@ -39,8 +39,7 @@ class TodoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
-    {   
-
+    {
         $rules = [
             'text' => 'required',
             'done' => 'required|boolean'
@@ -54,10 +53,10 @@ class TodoController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return Response::json(array(
+            return Response::json([
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
-            ), 400);
+            ], 400);
         }
 
         $data = Todo::create($request->all());
@@ -65,7 +64,7 @@ class TodoController extends Controller
         return Response::json([
                 'success' => true,
                 'message' => "Data inserted {$data->text}"
-            ]);
+            ], 200);
     }
 
     /**
@@ -78,7 +77,31 @@ class TodoController extends Controller
      */
     public function update($id, Request $request)
     {
-        // TODO
+        $rules = [
+            'text' => 'required',
+            'done' => 'required|boolean'
+        ];
+
+        $messages = [
+            'required'  => 'El campo :attribute es requerido',
+            'boolean'   => 'El campo :attribute debe ser boolenao',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return Response::json([
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ], 400);
+        }
+
+        $updated = Todo::find($id)->update($request->all());
+
+        return Response::json([
+                'success' => true,
+                'message' => "Data updated"
+            ], 200);
     }
 
     /**
