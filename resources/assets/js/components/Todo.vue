@@ -2,14 +2,7 @@
     <div class="container">
         <todo-input></todo-input>
         <table class="table is-bordered">
-            <tr v-for="(todo, index) in items" :key="index">
-                <td class="is-fullwidth" style="cursor: pointer" :class="{ 'is-done': todo.done }" @click="toggleDone(todo)">
-                    {{ todo.text }}
-                </td>
-                <td class="is-narrow">
-                    <a class="button is-danger is-small" @click="removeTodo(todo)">Eliminar</a>
-                </td>
-            </tr>
+            <todo-item v-for="(todo, index) in items" :todo="todo" :index="index" :key="todo.id"></todo-item>
         </table>
     </div>
 </template>

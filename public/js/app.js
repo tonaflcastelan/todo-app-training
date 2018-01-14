@@ -30639,13 +30639,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /**
  * Tips:
@@ -30726,41 +30719,10 @@ var render = function() {
         "table",
         { staticClass: "table is-bordered" },
         _vm._l(_vm.items, function(todo, index) {
-          return _c("tr", { key: index }, [
-            _c(
-              "td",
-              {
-                staticClass: "is-fullwidth",
-                class: { "is-done": todo.done },
-                staticStyle: { cursor: "pointer" },
-                on: {
-                  click: function($event) {
-                    _vm.toggleDone(todo)
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  "\n                " + _vm._s(todo.text) + "\n            "
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("td", { staticClass: "is-narrow" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "button is-danger is-small",
-                  on: {
-                    click: function($event) {
-                      _vm.removeTodo(todo)
-                    }
-                  }
-                },
-                [_vm._v("Eliminar")]
-              )
-            ])
-          ])
+          return _c("todo-item", {
+            key: todo.id,
+            attrs: { todo: todo, index: index }
+          })
         })
       )
     ],
@@ -30976,11 +30938,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            todoItemText: ''
-        };
-    }
+    props: ['todo']
 });
 
 /***/ }),
@@ -31000,7 +30958,7 @@ var render = function() {
         staticStyle: { cursor: "pointer" },
         on: {
           click: function($event) {
-            _vm.toggleDone(_vm.todo)
+            _vm.$parent.toggleDone(_vm.todo)
           }
         }
       },
@@ -31014,7 +30972,7 @@ var render = function() {
           staticClass: "button is-danger is-small",
           on: {
             click: function($event) {
-              _vm.removeTodo(_vm.todo)
+              _vm.$parent.removeTodo(_vm.todo)
             }
           }
         },
